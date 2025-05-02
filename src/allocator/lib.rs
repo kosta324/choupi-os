@@ -36,6 +36,17 @@ extern "C" {
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn malloc(size: usize) -> *mut u8 {
+    let layout = Layout::from_size_align(size, 8).unwrap();
+    ALLOCATOR.alloc(layout)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn free(_ptr: *mut u8) {
+    // not needed
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn initialize_heap() {
     let bottom = __current_heap_bottom();
     let size = __current_heap_size();
